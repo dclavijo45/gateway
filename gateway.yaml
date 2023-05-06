@@ -1,0 +1,9 @@
+paths:
+  - path: /api1
+    servers:
+      - http://backend-api1
+    filters:
+      - Authorization
+  - path: /api2
+    servers:
+      - http://backend-api2
