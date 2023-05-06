@@ -50,8 +50,8 @@ def index():
 
 
 
-@gateway.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELELTE', 'PATCH'])
-@gateway.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELELTE', 'PATCH'])
+@gateway.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+@gateway.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
 def path_router(path):
     try:
         parts = request.full_path.split('/')
@@ -60,22 +60,22 @@ def path_router(path):
         
         for entry in config["paths"]:
             if ("/" + service) == entry["path"]:
-                    response = requests.request(
-                        method=request.method,
-                        url=random.choice(entry["servers"]) + "/" + pathsReq,
-                        headers={key: value for (key, value) in request.headers if key != "Host"},
-                        data=request.get_data(),
-                        cookies=request.cookies,
-                        allow_redirects=False,
-                        timeout=5,
-                    )
+                response = requests.request(
+                    method=request.method,
+                    url=random.choice(entry["servers"]) + "/" + pathsReq,
+                    headers={key: value for (key, value) in request.headers if key != "Host"},
+                    data=request.get_data(),
+                    cookies=request.cookies,
+                    allow_redirects=False,
+                    timeout=5,
+                )
 
-                    return (
-                        response.content,
-                        response.status_code,
-                        response.headers.items(),
-                    )
-                    
+                return (
+                    response.content,
+                    response.status_code,
+                    response.headers.items(),
+                )
+                
         return "Gateway Not Found Service", 418
     except requests.exceptions.ConnectionError:
         return "Service Unavailable", 503
